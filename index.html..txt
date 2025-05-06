@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Play Flappy Bird Online - Simple Web Game</title>
+  <meta name="description" content="Play Flappy Bird online in your browser. A fun and simple web game, no downloads needed!" />
+  <meta name="keywords" content="flappy bird, play flappy bird, online game, web game, free flappy bird" />
+  <meta name="author" content="Your Name" />
+  <meta name="robots" content="index, follow" />
+</head>
+<body style="margin:0; overflow:hidden; background:skyblue;">
+  <div id="game" style="width:100vw; height:100vh; position:relative; overflow:hidden;">
+    <div id="bird" style="width:30px; height:30px; background:yellow; border-radius:50%; position:absolute; top:100px; left:50px;"></div>
+  </div>
+
+  <script>
+    const bird = document.getElementById('bird');
+    let birdY = 100;
+    let gravity = 2;
+    let isGameOver = false;
+
+    function fall() {
+      if (isGameOver) return;
+      birdY += gravity;
+      bird.style.top = birdY + 'px';
+      if (birdY > window.innerHeight || birdY < 0) {
+        gameOver();
+      }
+    }
+    setInterval(fall, 20);
+
+    document.addEventListener('touchstart', () => {
+      birdY -= 40;
+    });
+
+    function createPipes() {
+      if (isGameOver) return;
+      let gap = 120;
+      let topHeight = Math.floor(Math.random() * 200) + 50;
+      let bottomHeight = window.innerHeight - topHeight - gap;
+
+      let topPipe = document.createElement('div');
+      topPipe.className = 'pipe topPipe';
+      topPipe.style.cssText = `width:50px; height:${topHeight}px; background:green; position:absolute; top:0; left:100vw; animation: movePipe 3s linear forwards;`;
+      game.appendChild(topPipe);
+
+      let bottomPipe = document.createElement('div');
+      bottomPipe.className = 'pipe bottomPipe';
+      bottomPipe.style.cssText = `width:50px; height:${bottomHeight}px; background:green; position:absolute; bottom:0; left:100vw; animation: movePipe 3s linear forwards;`;
+      game.appendChild(bottomPipe);
+
+      setTimeout(() => {
+        topPipe.remove();
+        bottomPipe.remove();
+      }, 3000);
+    }
+    setInterval(createPipes, 2000);
+
+    function gameOver() {
+      isGameOver = true;
+      alert('Game Over!');
+      location.reload();
+    }
+  </script>
+
+  <style>
+    @keyframes movePipe {
+      from { left: 100vw; }
+      to { left: -60px; }
+    }
+  </style>
+</body>
+</html>
